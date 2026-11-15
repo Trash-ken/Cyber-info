@@ -2,3 +2,12 @@ for i in {1..254}; do
     ping -c 1 -W 1 192.168.25.$i >/dev/null 2>&1 &&
     echo "Alive: 192.168.25.$i"
 done
+
+
+
+
+nmap port/service scan 
+
+TARGET=192.168.80.10; 
+(echo 5985; grep -v '^#' /usr/share/nmap/nmap-services | sort -rk3 | head -n 1000 | awk '{print $2}' | cut -d/ -f1) | awk '!seen[$0]++' | xargs -P8 -I{} 
+bash -c 'for i in 1 2 3; do nc -vz -w4 '"$TARGET"' {} 2>&1 | grep -m1 "open" && exit 0; done'   
