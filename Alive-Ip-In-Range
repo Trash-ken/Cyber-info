@@ -11,3 +11,14 @@ nmap port/service scan
 TARGET=192.168.80.10; 
 (echo 5985; grep -v '^#' /usr/share/nmap/nmap-services | sort -rk3 | head -n 1000 | awk '{print $2}' | cut -d/ -f1) | awk '!seen[$0]++' | xargs -P8 -I{} 
 bash -c 'for i in 1 2 3; do nc -vz -w4 '"$TARGET"' {} 2>&1 | grep -m1 "open" && exit 0; done'   
+
+
+ip_scan
+
+ cat > ip_scan << 'EOF'
+> #!/bin/bash
+> for t in $(seq 1 254)
+> do
+> timeout 1 bash -c "ping -c 1 192.168.98.$t" &> /dev/null && echo [+] Available IP active is 192.168.98.$t &
+> done
+> EOF
